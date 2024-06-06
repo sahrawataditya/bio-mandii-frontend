@@ -2,6 +2,7 @@ import { useUser } from "@/app/hooks/useUser";
 import { axiosService } from "@/app/lib/axiosService";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { CgSpinner } from "react-icons/cg";
 
 const ChangeUsername = () => {
   const { userData } = useUser();

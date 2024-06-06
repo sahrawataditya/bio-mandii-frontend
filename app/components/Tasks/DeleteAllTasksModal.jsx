@@ -12,7 +12,7 @@ import { axiosService } from "@/app/lib/axiosService";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 
-export default function DeleteAllTasksModal() {
+export default function DeleteAllTasksModal({ getUserTasks }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const deleteAllTasks = async () => {
@@ -21,6 +21,7 @@ export default function DeleteAllTasksModal() {
       const response = await axiosService.delete("/task/deleteAllTasks");
       console.log(response);
       if (response.data.success) {
+        getUserTasks();
         toast.success(response.data.message);
       } else {
         toast.error(response.data.message);

@@ -11,12 +11,11 @@ import Pagination from "../Tasks/Pagination";
 
 const TaskTable = () => {
   const { token } = useUser();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [tasks, setTasks] = useState(null);
+  const [tasks, setTasks] = useState([]);
   const [counts, setCounts] = useState(null);
   const getUserTasks = async () => {
-    setLoading(true);
     try {
       const response = await axiosService.get(
         `/task/getTasks?page=${currentPage}`
@@ -25,9 +24,11 @@ const TaskTable = () => {
         setCounts(response.data.counts);
         setTasks(response.data.tasks);
       } else {
+        setTasks([]);
         console.log(response);
       }
     } catch (error) {
+      setTasks([]);
       console.log(error);
     } finally {
       setLoading(false);
@@ -41,11 +42,11 @@ const TaskTable = () => {
   }, [currentPage]);
 
   return (
-    <div className="bg-white flex  items-center justify-center pt-5 pb-14">
+    <div className="bg-white flex items-center justify-center pt-5 pb-14">
       <div className="w-full px-2">
         <div className="flex justify-between items-center">
           <h1 className="sm:text-xl text-base font-medium">All Tasks</h1>
-          <DeleteAllTasksModal />
+          <DeleteAllTasksModal getUserTasks={getUserTasks} />
         </div>
         <div className="w-full overflow-x-scroll md:overflow-auto 2xl:max-w-none mt-2">
           <table className="table-auto overflow-scroll md:overflow-auto w-full text-left border mt-6">
@@ -83,8 +84,8 @@ const TaskTable = () => {
                 </tr>
               )}
               {!loading &&
-                tasks?.length > 0 &&
-                tasks?.map((data, index) => (
+                tasks.length > 0 &&
+                tasks.map((data, index) => (
                   <tr key={index}>
                     <td
                       className={`py-2 px-3 font-normal text-base ${
@@ -104,7 +105,7 @@ const TaskTable = () => {
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
-                      } whitespace-nowrap text-center`}
+                      } whitespace-nowrap text-center capitalize`}
                     >
                       {data?.title}
                     </td>
@@ -115,7 +116,7 @@ const TaskTable = () => {
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
-                      } whitespace-nowrap text-center`}
+                      } whitespace-nowrap text-center capitalize`}
                     >
                       {data?.description}
                     </td>
@@ -173,6 +174,16 @@ const TaskTable = () => {
                     </td>
                   </tr>
                 ))}
+              {!loading && tasks?.length === 0 && (
+                <tr className=" w-full">
+                  <td
+                    className="w-full p-4 text-center font-semibold"
+                    colSpan="100%"
+                  >
+                    No tasks found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

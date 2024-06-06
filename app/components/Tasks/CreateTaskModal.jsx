@@ -27,6 +27,7 @@ export default function CreateTaskModal() {
       const response = await axiosService.post("/task/create", data);
       if (response.data.success) {
         toast.success(response.data.message);
+        window.location.reload();
       } else {
         toast.error(response.data.message);
       }

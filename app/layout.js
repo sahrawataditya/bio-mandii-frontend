@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
           <>
             <Toaster
               position="top-center"
-              toastOptions={{ duration: 3000 }}
+              toastOptions={{ duration: 1000 }}
               containerStyle={{ fontSize: "14px", fontWeight: 600 }}
             />
             {children}

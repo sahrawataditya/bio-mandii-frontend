@@ -12,17 +12,18 @@ import { axiosService } from "@/app/lib/axiosService";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 
-export default function DeleteAllTasksModal({ getUserTasks }) {
+export default function DeleteSingleTasksModal({ Task, getAllTasks }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const deleteAllTasks = async () => {
+  const deleteTask = async () => {
     setLoading(true);
     try {
-      const response = await axiosService.delete("/task/deleteAllTasks");
-      console.log(response);
+      const response = await axiosService.delete(
+        `/task/deleteTask/${Task?._id}`
+      );
       if (response.data.success) {
-        getUserTasks();
         toast.success(response.data.message);
+        getAllTasks();
       } else {
         toast.error(response.data.message);
       }
@@ -36,11 +37,10 @@ export default function DeleteAllTasksModal({ getUserTasks }) {
   return (
     <>
       <button
-        className=" bg-red-500 p-2 text-white text-sm rounded-md font-semibold flex items-center gap-1 focus:ring-2 ring-red-300"
         onClick={() => setOpen(true)}
+        className="bg-red-500 p-2 text-white text-sm rounded-md font-semibold focus:ring-2 ring-red-300"
       >
-        <MdDeleteOutline size={20} />
-        Delete all
+        <MdDeleteOutline size={18} />
       </button>
       <Transition show={open}>
         <Dialog className="relative z-20" onClose={setOpen}>
@@ -79,11 +79,11 @@ export default function DeleteAllTasksModal({ getUserTasks }) {
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
-                          Delete All Tasks
+                          Delete This Task
                         </DialogTitle>
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">
-                            Are you sure you want to delete all tasks?
+                            Are you sure you want to delete this task?
                           </p>
                         </div>
                       </div>
@@ -94,7 +94,7 @@ export default function DeleteAllTasksModal({ getUserTasks }) {
                       type="button"
                       disabled={loading}
                       className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto flex items-center gap-1 disabled:bg-red-800"
-                      onClick={deleteAllTasks}
+                      onClick={deleteTask}
                     >
                       Delete
                       {loading && (

@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const axiosService = axios.create({
-  baseURL: "https://bio-mandii-backend.onrender.com/api/v1",
+  baseURL: "http://localhost:4000/api/v1",
 });

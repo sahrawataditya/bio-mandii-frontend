@@ -4,13 +4,17 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { CgSpinner } from "react-icons/cg";
 import DeleteAllTasksModal from "../Tasks/DeleteAllTasksModal";
+import DeleteSingleTasksModal from "../Tasks/DeleteSingleTaskModal";
+import EditTaskModal from "../Tasks/EditTaskModal";
+import ReadTaskModal from "../Tasks/ReadTaskModal";
+import Pagination from "../Tasks/Pagination";
 
 const TaskTable = () => {
   const { token } = useUser();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [tasks, setTasks] = useState([]);
-
+  const [tasks, setTasks] = useState(null);
+  const [counts, setCounts] = useState(null);
   const getUserTasks = async () => {
     setLoading(true);
     try {
@@ -18,6 +22,7 @@ const TaskTable = () => {
         `/task/getTasks?page=${currentPage}`
       );
       if (response.data.success) {
+        setCounts(response.data.counts);
         setTasks(response.data.tasks);
       } else {
         console.log(response);
@@ -43,7 +48,7 @@ const TaskTable = () => {
           <DeleteAllTasksModal />
         </div>
         <div className="w-full overflow-x-scroll md:overflow-auto 2xl:max-w-none mt-2">
-          <table className="table-auto overflow-scroll md:overflow-auto w-full text-left font-inter border ">
+          <table className="table-auto overflow-scroll md:overflow-auto w-full text-left border mt-6">
             <thead className="rounded-lg text-base text-white font-semibold w-full">
               <tr className="bg-[#222E3A]/[6%]">
                 <th className="py-3 px-3 text-[#212B36] sm:text-base font-bold text-center whitespace-nowrap">
@@ -69,31 +74,33 @@ const TaskTable = () => {
             <tbody>
               {loading && (
                 <tr className=" w-full">
-                  <div className="flex items-center gap-2 w-full p-4 ">
-                    <CgSpinner className="animate-spin h-5 w-5" />
-                    Loading...
-                  </div>
+                  <td className="w-full p-4" colSpan="100%">
+                    <div className="flex justify-center items-center gap-2">
+                      <CgSpinner className="animate-spin h-5 w-5" />
+                      Loading...
+                    </div>
+                  </td>
                 </tr>
               )}
               {!loading &&
-                tasks.length > 0 &&
+                tasks?.length > 0 &&
                 tasks?.map((data, index) => (
                   <tr key={index}>
                     <td
                       className={`py-2 px-3 font-normal text-base ${
                         index == 0
-                          ? "border-t-2 border-black"
+                          ? "border-t border-black"
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
                       } whitespace-nowrap text-center`}
                     >
-                      {index + 1}
+                      {data?._id}
                     </td>
                     <td
                       className={`py-2 px-3 font-normal text-base ${
                         index == 0
-                          ? "border-t-2 border-black"
+                          ? "border-t border-black"
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
@@ -104,7 +111,7 @@ const TaskTable = () => {
                     <td
                       className={`py-2 px-3 font-normal text-base ${
                         index == 0
-                          ? "border-t-2 border-black"
+                          ? "border-t border-black"
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
@@ -115,7 +122,7 @@ const TaskTable = () => {
                     <td
                       className={`py-2 px-3 text-base text-center  font-normal ${
                         index == 0
-                          ? "border-t-2 border-black"
+                          ? "border-t border-black"
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
@@ -123,11 +130,13 @@ const TaskTable = () => {
                     >
                       <span
                         class={`inline-flex items-center justify-center font-medium rounded-full px-2.5 py-1  ${
-                          data?.status === "pending"
+                          data?.status === "in progress"
                             ? "bg-amber-100 text-amber-700"
                             : data?.status === "completed"
                             ? "bg-emerald-100 text-emerald-700"
-                            : "bg-red-100 text-red-700"
+                            : data?.status === "not started"
+                            ? "bg-red-100 text-red-700"
+                            : ""
                         }`}
                       >
                         <p class="whitespace-nowrap text-sm">{data?.status}</p>
@@ -136,7 +145,7 @@ const TaskTable = () => {
                     <td
                       className={`py-2 px-3 text-base text-center font-medium ${
                         index == 0
-                          ? "border-t-2 border-black"
+                          ? "border-t border-black"
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
@@ -147,19 +156,31 @@ const TaskTable = () => {
                     <td
                       className={`py-2 px-3 text-base text-center font-medium ${
                         index == 0
-                          ? "border-t-2 border-black"
+                          ? "border-t border-black"
                           : index == tasks?.length
                           ? "border-y"
                           : "border-t"
                       } whitespace-nowrap`}
                     >
-                      {moment(data?.createdAt).format("DD-MMM-YY")}
+                      <div className="flex gap-3 justify-center">
+                        <ReadTaskModal Task={data} />
+                        <EditTaskModal Task={data} getAllTasks={getUserTasks} />
+                        <DeleteSingleTasksModal
+                          Task={data}
+                          getAllTasks={getUserTasks}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
             </tbody>
           </table>
         </div>
+        <Pagination
+          counts={counts}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
     </div>
   );

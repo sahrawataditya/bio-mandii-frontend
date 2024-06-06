@@ -10,23 +10,50 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
+import { MdEdit } from "react-icons/md";
 
-export default function CreateTaskModal() {
+const statusOptions = [
+  {
+    label: "In progress",
+    value: "in progress",
+  },
+  {
+    label: "Mark as Complete",
+    value: "completed",
+  },
+  {
+    label: "Not Started",
+    value: "not started",
+  },
+];
+export default function EditTaskModal({ Task, getAllTasks }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      title: Task?.title,
+      description: Task?.description,
+      status: Task?.status,
+    },
+  });
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axiosService.post("/task/create", data);
+      const response = await axiosService.patch(
+        `/task/updateTask/${Task?._id}`,
+        data
+      );
+      console.log(response);
       if (response.data.success) {
         toast.success(response.data.message);
+        getAllTasks();
       } else {
         toast.error(response.data.message);
       }
@@ -41,10 +68,10 @@ export default function CreateTaskModal() {
   return (
     <>
       <button
-        className="block rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-white hover:text-black border-black border focus:outline-none transition-all duration-300 ease-in"
         onClick={() => setOpen(true)}
+        className="bg-blue-500 p-2 text-white text-sm rounded-md font-semibold focus:ring-2 ring-blue-300"
       >
-        Create Task
+        <MdEdit size={18} />
       </button>
       <Transition show={open}>
         <Dialog className="relative z-20" onClose={setOpen}>
@@ -76,7 +103,7 @@ export default function CreateTaskModal() {
                         as="h2"
                         className="text-lg leading-6 text-gray-900 font-bold"
                       >
-                        Create Task
+                        Update Task
                       </DialogTitle>
                     </div>
                   </div>
@@ -123,13 +150,51 @@ export default function CreateTaskModal() {
                           </span>
                         )}
                       </div>
+                      <div className="w-full mt-2">
+                        <label
+                          htmlFor="status"
+                          className="text-sm font-semibold"
+                        >
+                          Enter Status
+                        </label>
+                        <div className="mt-2">
+                          <select
+                            {...register("status", {
+                              required: "*Status is Required",
+                            })}
+                            id="status"
+                            className="w-full border-black outline-none border p-3 text-sm rounded-lg"
+                          >
+                            {statusOptions.map((option, indx) => (
+                              <option
+                                value={option.value}
+                                selected={Task?.status === option.value}
+                                key={indx}
+                              >
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.status && (
+                            <span className="text-red-500 text-sm">
+                              {errors.status.message}
+                            </span>
+                          )}
+                        </div>
+
+                        {errors.description && (
+                          <span className="text-red-500 text-sm">
+                            {errors.description.message}
+                          </span>
+                        )}
+                      </div>
                       <div className="sm:flex sm:flex-row-reverse pt-5">
                         <button
                           type="submit"
                           disabled={loading}
                           className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white hover:text-black sm:ml-3 sm:w-auto flex items-center gap-1 border border-black"
                         >
-                          Create
+                          Update
                           {loading && (
                             <CgSpinner className="animate-spin " size={20} />
                           )}

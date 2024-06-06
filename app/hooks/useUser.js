@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { axiosService } from "../lib/axiosService";
 
 export const useUser = () => {
-  const token = Cookies.get("token");
+  const [token, setToken] = useState(Cookies.get("token"));
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const getUser = async () => {
@@ -23,11 +23,12 @@ export const useUser = () => {
     }
   };
   useEffect(() => {
+    setToken(Cookies.get("token"));
     if (token) {
       axiosService.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       getUser();
     }
   }, [token]);
 
-  return { userData, loading };
+  return { userData, loading, token };
 };

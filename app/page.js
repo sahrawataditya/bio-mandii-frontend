@@ -1,6 +1,7 @@
 "use client";
 import Logout from "./components/Common/Logout";
 import TaskTable from "./components/Home/TaskTable";
+import CreateTaskModal from "./components/Tasks/CreateTaskModal";
 import { useUser } from "./hooks/useUser";
 export default function Home() {
   const { userData, loading } = useUser();
@@ -25,12 +26,7 @@ export default function Home() {
             </p>
           </div>
           <div className="mt-4 gap-4 sm:mt-0">
-            <button
-              className="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2"
-              type="button"
-            >
-              Create Task
-            </button>
+            <CreateTaskModal />
           </div>
         </div>
         <TaskTable />

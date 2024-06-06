@@ -1,9 +1,15 @@
+## Cloning Repo in local machine
+
+```bash
+git clone https://github.com/sahrawataditya/bio-mandii-frontend.git
+```
+
 ## Install All Dependencies
 
 ```bash
 npm install
 # or
-yarn 
+yarn
 # or
 pnpm
 # or
@@ -25,4 +31,3 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-

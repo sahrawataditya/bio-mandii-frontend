@@ -1,5 +1,6 @@
 "use client";
 import { axiosService } from "@/app/lib/axiosService";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -23,6 +24,7 @@ const AuthPage = ({ title }) => {
       const response = await axiosService.post(apiRoute, data);
       if (response.data.success) {
         toast.success(response.data.message);
+        apiRoute === "/login" && Cookies.set("token", response.data.token);
         router.push(pathname === "/register" ? "/login" : "/");
       } else {
         toast.error(response.data.message);

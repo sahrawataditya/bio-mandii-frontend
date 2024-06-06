@@ -32,7 +32,7 @@ export default function ReadTaskModal({ Task }) {
           </TransitionChild>
 
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
               <TransitionChild
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -41,9 +41,9 @@ export default function ReadTaskModal({ Task }) {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 p-4">
                   <div className="bg-white mb-4">
-                    <div className="mt-3 text-center  sm:mt-0 sm:text-left">
+                    <div className="text-center sm:text-left">
                       <DialogTitle
                         as="h2"
                         className="text-lg leading-6 text-gray-900 font-bold"
@@ -57,7 +57,8 @@ export default function ReadTaskModal({ Task }) {
                       Title : <span className="font-normal">{Task?.title}</span>
                     </h1>
                     <h1 className="font-semibold">
-                      Description : <span className="font-normal">{Task?.description}</span>
+                      Description :{" "}
+                      <span className="font-normal">{Task?.description}</span>
                     </h1>
                   </div>
                 </DialogPanel>

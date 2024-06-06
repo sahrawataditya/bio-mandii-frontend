@@ -16,6 +16,7 @@ const AuthPage = ({ title }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
@@ -33,6 +34,7 @@ const AuthPage = ({ title }) => {
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
+      reset();
     }
   };
   return (
@@ -105,7 +107,7 @@ const AuthPage = ({ title }) => {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 disabled:bg-indigo-800"
+              className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-white hover:text-black border border-black transition-all duration-300 ease-in disabled:hover:bg-black"
             >
               {loading ? (
                 <div className=" flex items-center gap-1">
@@ -126,7 +128,7 @@ const AuthPage = ({ title }) => {
             : "Already have an account?"}{" "}
           <Link
             href={pathname === "/login" ? "/register" : "/login"}
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            className="font-semibold leading-6 text-black"
           >
             {pathname === "/login" ? "Register" : "Login"}
           </Link>

@@ -16,6 +16,20 @@ pnpm
 bun
 ```
 
+## Running Server Locally
+Change the axiosService url to local if you want to use local server
+In this file ./lib/axiosService.js
+```bash
+Before
+export const axiosService = axios.create({
+  baseURL: "https://bio-mandii-backend.onrender.com/api/v1",
+});
+After running the backend
+export const axiosService = axios.create({
+  baseURL: "http://localhost:server-port/api/v1",
+});
+```
+
 ## Getting Started
 
 First, run the development server:

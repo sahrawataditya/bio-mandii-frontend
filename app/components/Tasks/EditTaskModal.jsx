@@ -181,12 +181,6 @@ export default function EditTaskModal({ Task, getAllTasks }) {
                             </span>
                           )}
                         </div>
-
-                        {errors.description && (
-                          <span className="text-red-500 text-sm">
-                            {errors.description.message}
-                          </span>
-                        )}
                       </div>
                       <div className="flex gap-3 justify-end items-center pt-5">
                         <button

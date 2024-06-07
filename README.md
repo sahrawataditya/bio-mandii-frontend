@@ -20,11 +20,12 @@ bun
 Change the axiosService url to local if you want to use local server
 In this file ./lib/axiosService.js
 ```bash
-Before
+//before
 export const axiosService = axios.create({
   baseURL: "https://bio-mandii-backend.onrender.com/api/v1",
 });
-After running the backend
+
+//after running the backend
 export const axiosService = axios.create({
   baseURL: "http://localhost:server-port/api/v1",
 });
